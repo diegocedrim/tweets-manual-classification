@@ -6,8 +6,41 @@
 {% endblock %}
 
 {% block content %}
+    <div class="container">
     <div class="page-header">
-        <h1>Tweets to Classify</h1>
+        <div class="row">
+            <div class="col-md-6"><h1>Tweets to Classify <small>showing {{ tags|length }} tweets</small></h1></div>
+            <div style="padding-top: 22px;" class="col-md-6 align-middle">
+                <div class="btn-group pull-right" role="group">
+                    <a href="{% url 'manual_tagging:next_tweets' 10 %}"
+                       role="button"
+                       class="btn btn-default {% if '/10/' in request.path %} active {% endif %}">
+                        10
+                    </a>
+                    <a href="{% url 'manual_tagging:next_tweets' 25 %}"
+                       role="button"
+                       class="btn btn-default {% if '/25/' in request.path %} active {% endif %}">
+                        25
+                    </a>
+                    <a href="{% url 'manual_tagging:next_tweets' 50 %}"
+                       role="button"
+                       class="btn btn-default {% if '/50/' in request.path %} active {% endif %}">
+                        50
+                    </a>
+                    <a href="{% url 'manual_tagging:next_tweets' 75 %}"
+                       role="button"
+                       class="btn btn-default {% if '/75/' in request.path %} active {% endif %}">
+                        75
+                    </a>
+                    <a href="{% url 'manual_tagging:next_tweets' 100 %}"
+                       role="button"
+                       class="btn btn-default {% if '/100/' in request.path %} active {% endif %}">
+                        100
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     {% if tags %}

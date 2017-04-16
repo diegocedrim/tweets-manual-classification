@@ -6,6 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template.defaulttags import register
+from django.db.models import F
+from django.db.models import Q
 import datetime
 from .models import *
 # Create your views here.
@@ -39,9 +41,14 @@ def index(request):
             if int(total_tweets) == 0:
                 continue
             total_classified = TweetTag.objects.filter(user__id=user.id, classification__isnull=False).count()
+            matches = TweetTag.objects.filter(user__id=user.id,
+                                              classification__id=F('tweet__previous_classification__id'),
+                                              classification__isnull=False).count()
+            conflicts = TweetTag.objects.filter(~Q(classification__id=F('tweet__previous_classification__id')),
+                                                user__id=user.id,classification__isnull=False).count()
             progress = "%.1f%%" % (100 * float(total_classified) / total_tweets)
             name = user.first_name + " " + user.last_name
-            all_users_progress.append((name, total_tweets, total_classified, progress))
+            all_users_progress.append((name, total_tweets, total_classified, progress, matches, conflicts))
         context["all_users_progress"] = all_users_progress
 
     return render(request, 'manual_tagging/index.html', context=context)
