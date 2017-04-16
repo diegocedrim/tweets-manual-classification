@@ -52,13 +52,20 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li {% if request.path == '/manual_tagging/' %}class="active"{% endif %}>
+                {% url 'manual_tagging:index' as index_url%}
+                <li {% if request.get_full_path == index_url %}class="active"{% endif %}>
                     <a href="{% url 'manual_tagging:index'%}">Task Overview</a>
                 </li>
-                <li {% if 'next_tweets' in request.path %}class="active"{% endif %}>
+                {% if size %}
+                    {% url 'manual_tagging:next_tweets' size as next_tweets_url%}
+                {% else %}
+                    {% url 'manual_tagging:next_tweets' 10 as next_tweets_url%}
+                {% endif %}
+                <li {% if request.get_full_path == next_tweets_url %}class="active"{% endif %}>
                     <a href="{% url 'manual_tagging:next_tweets' 10 %}">Classify</a>
                 </li>
-                <li {% if 'latest_classified' in request.path %}class="active"{% endif %}>
+                {% url 'manual_tagging:latest_classified' as latest_url%}
+                <li {% if request.get_full_path == latest_url %}class="active"{% endif %}>
                     <a href="{% url 'manual_tagging:latest_classified' %}">Latest Classified</a>
                 </li>
             </ul>
