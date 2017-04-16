@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <script src="{% static 'manual_tagging/js/next_tweets.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Tweets to Classify</h1>
+    </div>
+
+    {% if tags %}
+        <form class="form-horizontal" id="form_tags" method="post" action="{% url 'manual_tagging:save_tags' %}">
+            <input type="hidden" name="size" value="{{ size }}"/>
+            {% csrf_token %}
+            {% for tag in tags %}
+                <dl class="dl-horizontal">
+                    <dt>Tweet</dt>
+                    <dd>{{ tag.tweet.text }}</dd>
+                    <dt>Classification</dt>
+                    <dd>
+                        {% for class in classifications %}
+                            <label class="radio-inline">
+                                <input type="radio" name="classification_tag_{{ tag.id }}"
+                                       data-parsley-ui-enabled="false"
+                                       value="{{ class.id }}" required/> {{ class.label }}
+                            </label>
+                        {% endfor %}
+                    </dd>
+                </dl>
+                <hr/>
+            {% endfor %}
+            <button type="submit" class="btn pull-right btn btn-success btn-lg">Save</button>
+        </form>
+    {% else %}
+        <p>You have finished the manual classification \o/</p>
+    {% endif %}
+{% endblock %}
+

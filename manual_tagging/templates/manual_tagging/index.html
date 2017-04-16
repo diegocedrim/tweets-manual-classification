@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if total_tweets > 0 %}
+        <div class="page-header">
+            <h1>Your Progress</h1>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Total Number of Tweets</td>
+                <td>{{ total_tweets }}</td>
+            </tr>
+            <tr>
+                <td>Classified Tweets</td>
+                <td>{{ total_classified }} ({{ progress }})</td>
+            </tr>
+            <tr>
+                <td>Tweets Classified as Relevant</td>
+                <td>{{ total_relevant }}</td>
+            </tr>
+            <tr>
+                <td>Tweets Classified as News</td>
+                <td>{{ total_news }}</td>
+            </tr>
+            <tr>
+                <td>Tweets Classified as Noise</td>
+                <td>{{ total_noise }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <div class="page-header">
+            <h1>Task Overview</h1>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Total Number of Tweets</th>
+                <th>Classified Tweets</th>
+                <th>Progress</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stats in all_users_progress %}
+                <tr>
+                    <td>{{ stats.0 }}</td>
+                    <td>{{ stats.1 }}</td>
+                    <td>{{ stats.2 }}</td>
+                    <td>{{ stats.3 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+

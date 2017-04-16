@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <script src="{% static 'manual_tagging/js/next_tweets.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Latest Classified</h1>
+    </div>
+
+    {% if last %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Tweet</th>
+                <th>Classification</th>
+                <th width="200px;">Date and Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tag in last %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a title="Change classification" href="{% url 'manual_tagging:load_single_tag' tag.id %}">
+                            {{ tag.tweet.text }}
+                        </a>
+                    </td>
+                    <td>{{ tag.classification.label }}</td>
+                    <td>{{ tag.last_update }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have not classified any tweets yet :(</p>
+    {% endif %}
+
+{% endblock %}
+
