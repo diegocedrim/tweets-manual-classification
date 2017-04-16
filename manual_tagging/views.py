@@ -19,7 +19,9 @@ def index(request):
     total_relevant = TweetTag.objects.filter(user__id=user.id, classification__key='RELEVANT').count()
     total_news = TweetTag.objects.filter(user__id=user.id, classification__key='NEWS').count()
     total_noise = TweetTag.objects.filter(user__id=user.id, classification__key='NOISE').count()
-    progress = "%.1f%%" % (100*float(total_classified)/total_tweets)
+    progress = "0%"
+    if int(total_tweets) > 0:
+        progress = "%.1f%%" % (100*float(total_classified)/total_tweets)
     context = {
         'total_tweets':total_tweets,
         'total_relevant': total_relevant,
